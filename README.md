@@ -26,7 +26,7 @@ tasvir overwrite
 
 **tasvir.config.js**
 
-```
+```javascript
 
 module.exports = {
   prefixSeparator: '--',
