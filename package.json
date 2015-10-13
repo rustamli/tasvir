@@ -1,0 +1,33 @@
+{
+  "name": "tasvir",
+  "version": "1.0.0",
+  "description": "Bulk image manipulation tool",
+  "main": "app.js",
+  "preferGlobal": "true",
+  "bin": {
+    "tasvir": "./bin/main.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "images",
+    "utils",
+    "processing",
+    "crop",
+    "resize",
+    "static"
+  ],
+  "author": "Turan Rustamli",
+  "license": "MIT",
+  "homepage": "http://rustam.li",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rustamli/tasvir.git"
+  },
+  "dependencies": {
+    "glob": "^5.0.15",
+    "jimp": "^0.2.8",
+    "tinify": "^1.1.1"
+  }
+}
