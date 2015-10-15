@@ -1,6 +1,6 @@
 # tasvir
 
-Tasvir is a tool for bulk image manipulations (resize, crop, optimize and more). It might be useful in context of static website generation to produce thumbnails and optimized versions of the content images. 
+Tasvir is a tool for bulk image manipulations (resize, crop, optimize and more). It might be useful in context of static website generation to produce thumbnails and optimized versions of the content images. Also tasvir might be used to produce images of different sizes for responsive websites.
 
 ## Installation
 
