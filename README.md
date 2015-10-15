@@ -90,7 +90,7 @@ Please note that you can call `{ apply: 'write' }` multiple times per each rule:
 { apply: 'mirror', params: [] },
 { apply: 'write', prefix: 'sm-gs-mr' }
 ```
-This will produce two files `sample--sm.png` (resized to 600px in width) and `sample-sm-gs-mr.png` (resized to 600px in width, greyscaled and mirrored).
+This will produce two files `sample--sm.png` (resized to 600px in width) and `sample--sm-gs-mr.png` (resized to 600px in width, greyscaled and mirrored).
 
 ## Usage
 
@@ -128,17 +128,17 @@ Unlike normal mode. All rules will be executed even, if resulting files already 
 
 ## Tinify integration
 
-**tasvir.config.js**
+Tasvir also optionally uses [Tinify](https://tinypng.com/developers) to optimize your images. 
+
+Here's a sample **tasvir.config.js** file with enabled tinify integration: 
 
 ```javascript
-
 module.exports = {
   prefixSeparator: '--',
 
   tinify: {
     enabled: true,
     apiKey: '<YOUR-KEY>',
-    saveOriginal: true,
     originalPrefix: 'orig',
   },
 
@@ -146,20 +146,36 @@ module.exports = {
     'static/images/*'
   ],
 
-  rules: [
-    {
-      chain: [
-        { apply: 'resize', params: [ 600, 'AUTO' ] },
-        { apply: 'write', prefix: 'w600' }
-      ]
-    },
-    {
-      chain: [
-        { apply: 'cover', params: [ 300, 300 ] },
-        { apply: 'write', prefix: 'sq' }
-      ]
-    }
-  ]
+  rules: [ ... ]
 };
-
 ```
+
+If tinify integration is enabled, before applying rules Tasvir will save a copy of original image file with a prefix specified in `tinify.originalPrefix` configuration, run tinify optimization and replace file with the result. After that rules are executed normally. 
+
+In normal mode, tinify even if it is enabled won't be executed if a file with a `tinify.originalPrefix` in its name exists.
+However in overwrite mode tinify will still be executed despite existing file with a `tinify.originalPrefix`.
+
+### Example
+
+- `sample.png` - Original unoptimized image 
+
+after tinify execution:
+
+(given `orig` as a value for `tinify.originalPrefix` in **tasvir.config.js**)
+
+- `sample.png` - Tinified (optimized) image 
+- `sample--orig.png` - Original unoptimized image 
+
+after applying rules:
+
+- `sample.png` - Tinified (optimized) image 
+- `sample--sm.png` - Tinified (optimized) and resized image
+- `sample--sm-gs-mr.png` - Tinified (optimized), resized, greyscaled and mirrored image 
+- `sample--orig.png` - Original unoptimized image 
+
+
+## License
+
+Released under MIT license
+
+See LICENSE file for details
