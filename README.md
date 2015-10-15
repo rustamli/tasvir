@@ -71,7 +71,7 @@ Every action in a `chain` is a call translated to a **jimp** method:
 { apply: 'write', prefix: 'small' }
 ```
 
-Running this for `sample.png` Would be translated into: 
+Running this for `sample.png` will result in: 
 
 ```javascript
 image.resize(600, Jimp.AUTO).greyscale().mirror().write('sample--small.png');
