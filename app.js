@@ -138,30 +138,57 @@ var app = {
   },
 
   runRules: function (filePath) {
+    var numOfWrites = 0,
+        registerWrite = function () {
+          numOfWrites -= 1;
+          if (numOfWrites === 0) {
+            utils._reportProcessed();
+          }
+        };
+
     var output = new Jimp(filePath, function (err, image) {
       config.rules.forEach(function (rule) {
-        rule.chain.forEach(function (action) {
-            if (action.apply === 'write') {
-              action.params = [ utils._addPrefix(filePath, action.prefix) ];
-            } else {
-              action.params.forEach(function (param, index) {
-                if (param === 'AUTO') {
-                    action.params[index] = Jimp.AUTO;
-                }
-              });
-            }
+        if (!app.isRuleApplied(filePath, rule) || config.overwriteMode) {
+          rule.chain.forEach(function (action) {
+              if (action.apply === 'write') {
+                action.params = [ utils._addPrefix(filePath, action.prefix), registerWrite ];
+                numOfWrites += 1;
+              } else {
+                action.params.forEach(function (param, index) {
+                  if (param === 'AUTO') {
+                      action.params[index] = Jimp.AUTO;
+                  }
+                });
+              }
 
-            var fn = image[action.apply];
-            if (!fn) {
-              console.error('action ' + action.apply + ' was not found');
-            } else {
-              image = fn.apply(image, action.params);
-            }
-        });
+              var fn = image[action.apply];
+              if (!fn) {
+                console.error('action ' + action.apply + ' was not found');
+              } else {
+                image = fn.apply(image, action.params);
+              }
+          });
+        } else {
+          utils._reportProcessed();
+        }
       });
     });
 
-    utils._reportProcessed();
+  },
+
+  isRuleApplied: function (filePath, rule) {
+    var ruleApplied = true;
+
+    rule.chain.forEach(function (action) {
+      if (action.apply === 'write') {
+          var resultingFile = utils._addPrefix(filePath, action.prefix);
+          if (!utils._doesExist(resultingFile)) {
+            ruleApplied = false;
+          }
+      }
+    });
+
+    return ruleApplied;
   },
 
   flatten: function (targetPath) {
