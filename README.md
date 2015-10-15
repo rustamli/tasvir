@@ -48,7 +48,7 @@ module.exports = {
 ### Rules 
 
 Each rule represents an object with single parameter `chain`. 
-Each `chain` contains number `actions` to be applied to each photo:
+Each `chain` contains number `actions` to be applied to each image:
 
 ```javascript
 {
