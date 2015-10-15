@@ -92,21 +92,41 @@ Please note that you can call `{ apply: 'write' }` multiple times per each rule:
 ```
 This will produce two files `sample--sm.png` (resized to 600px in width) and `sample-sm-gs-mr.png` (resized to 600px in width, greyscaled and mirrored).
 
-## Running
+## Usage
 
-Normal mode:
+### Normal mode
+
+Execute in your project root folder (folder containing `tasvir.config.js`):
 
 ```
 tasvir
 ```
 
-Overwrite mode (will force tinification):
+All files containing `prefixSeparator` (for example `--`) will be ignored.
+In normal mode tasvir will be applied only for files that were not previously processed. 
+Before applying each rule to a file, tasvir checks whether files with resulting prefixes already exists in that case rule is ignored for that file.
+
+So a rule for file `sample.png`: 
+
+```
+{ apply: 'resize', params: [ 600, 'AUTO' ] }, { apply: 'write', prefix: 'sm' }
+```
+
+will be ignored in case if a file named `sample--sm.png` exists
+
+### Overwrite mode
+
+Execute in your project root folder: 
 
 ```
 tasvir overwrite
 ```
 
-## Sample configuration file:
+All files containing `prefixSeparator` (for example `--`) will still be ignored.
+
+Unlike normal mode. All rules will be executed even, if resulting files already exist.
+
+## Tinify integration
 
 **tasvir.config.js**
 
